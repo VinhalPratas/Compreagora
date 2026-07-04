@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinhal Pratas</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#f5f5f7;
+    padding-bottom:100px;
+}
+.top-strip{
+    background:#000;
+    color:#fff;
+    text-align:center;
+    padding:8px;
+    font-size:13px;
+    font-weight:500;
+}
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 15px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+}
+.logo{
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:3px;
+}
+.search{
+    padding:15px;
+    background:#fff;
+}
+.search input{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:14px;
+    background:#f5f5f7;
+}
+.navbar{
+    display:flex;
+    overflow-x:auto;
+    gap:12px;
+    padding:12px 15px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+}
+.navbar::-webkit-scrollbar{display:none;}
+.navbar button{
+    background:#f5f5f7;
+    border:none;
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:14px;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:0.2s;
+}
+.navbar button:hover, .navbar button.active{
+    background:#000;
+    color:#fff;
+}
+.filter-sort{
+    background:#fff;
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+.filter-sort select{
+    padding:10px 18px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:14px;
+    width:100%;
+    max-width:300px;
+}
+.container{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:15px;
+    padding:15px;
+    max-width:1200px;
+    margin:auto;
+    align-items:stretch;
+}
+@media(min-width:768px){
+    .container{grid-template-columns:repeat(3, minmax(0, 1fr));}
+}
+@media(min-width:1024px){
+    .container{grid-template-columns:repeat(4, minmax(0, 1fr));}
+}
+.card{
+    background:#fff;
+    padding:12px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.03);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-width:0;
+    height:100%;
+}
+.card img{
+    display:block;
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    border-radius:14px;
+    margin-bottom:10px;
+}
+.card h3{
+    font-size:14px;
+    margin-bottom:6px;
+    color:#333;
+    line-height:1.3;
+    height:54px;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+}
+.status{
+    font-size:11px;
+    font-weight:600;
+    padding:4px 8px;
+    border-radius:6px;
+    display:inline-block;
+    align-self:flex-start;
+    margin-bottom:8px;
+    width:fit-content;
+}
+.status.pronta{
+    background:#e3fcef;
+    color:#00875a;
+}
+.status.encomenda{
+    background:#deebff;
+    color:#0747a6;
+}
+.variacao-tamanho{
+    margin-bottom:10px;
+    height:55px;
+}
+.variacao-tamanho label{
+    font-size:11px;
+    color:#777;
+    display:block;
+    margin-bottom:3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.variacao-tamanho select{
+    width:100%;
+    padding:6px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:13px;
+    background:#fff;
+}
+@media(max-width:480px){
+    .container{
+        gap:10px;
+        padding:10px;
+    }
+    .card{
+        padding:9px;
+        border-radius:14px;
+    }
+    .card img{
+        border-radius:10px;
+        margin-bottom:8px;
+    }
+    .card h3{
+        font-size:12px;
+        height:48px;
+    }
+    .status{
+        font-size:10px;
+        padding:3px 6px;
+    }
+    .variacao-tamanho{
+        height:50px;
+    }
+    .variacao-tamanho select{
+        font-size:12px;
+    }
+    .price{
+        font-size:14px;
+    }
+    .add-btn{
+        padding:9px 6px;
+        font-size:12px;
+    }
+}
+.price{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:10px;
+    color:#000;
+}
+.add-btn{
+    width:100%;
+    padding:10px;
+    background:#000;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    font-size:13px;
+    transition:0.2s;
+}
+.add-btn:hover{
+    background:#333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-strip">
+PRATA 925 AUTÊNTICA ✨ | ENVIOS PARA TODO BRASIL
+</div>
+
+<header style="flex-direction:column;align-items:center;text-align:center;">
+    <div class="logo">VINHAL PRATAS</div>
+    <div style="font-size:13px;color:#666;margin-top:4px;">
+        📞 (62) 99473-6469 | 📞 (62) 92000-8312 <br>
+        ✉️ vinhalatendimento@gmail.com
+    </div>
+</header>
+
+<div class="search">
+    <input type="text" id="inputBusca" placeholder="Buscar produto pelo nome..." onkeyup="pesquisarProduto()">
+</div>
+
+<div class="navbar">
+    <button onclick="filtrarCategoria('queima de estoque')">Queima de Estoque</button>
+    <button class="active" onclick="filtrarCategoria('todos')">Todos</button>
+    <button onclick="filtrarCategoria('pronto entrega')">Pronto Entrega</button>
+    <button onclick="filtrarCategoria('sob encomenda')">Sob Encomenda</button>
+    <button onclick="filtrarCategoria('brincos')">Brincos</button>
+    <button onclick="filtrarCategoria('anéis')">Anéis</button>
+    <button onclick="filtrarCategoria('alianças')">Alianças</button>
+    <button onclick="filtrarCategoria('colares')">Colares</button>
+    <button onclick="filtrarCategoria('pulseiras')">Pulseiras</button>
+    <button onclick="filtrarCategoria('berloques')">Berloques</button>
+</div>
+
+<div class="filter-sort">
+    <select onchange="ordenarProdutos(this.value)">
+        <option value="">Ordenar por</option>
+        <option value="menor">Menor preço</option>
+        <option value="maior">Maior preço</option>
+        <option value="az">Nome A-Z</option>
+        <option value="za">Nome Z-A</option>
+    </select>
+</div>
+
+<div class="container" id="listaProdutos">
+
+    
+
+    <div class="card" data-categoria="anéis" data-status="sob encomenda">
+        <img src="Anel Letras Regulável.webp" alt="Anel Letras Regulável">
+        <h3>Anel Letras Regulável</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="50.00">R$ 50,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 50,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="anéis" data-status="sob encomenda">
+        <img src="Anel Flor Cravejada Azul.webp" alt="Anel Flor Cravejada Azul">
+        <h3>Anel Flor Cravejada Azul</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos disponíveis:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="50.00">R$ 50,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 50,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Brinco Zircônia 3mm Redondo.webp" alt="Brinco Zircônia 3mm Redondo">
+        <h3>Brinco Zircônia 3mm Redondo</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="20.00">3mm - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 20,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Brinco Zircônia 6mm.webp" alt="Brinco Zircônia 6mm">
+        <h3>Brinco Zircônia 6mm</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="25.00">6mm - R$ 25,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 25,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Brinco Zircônia 10mm Quadrado.webp" alt="Brinco Zircônia 10mm Quadrado">
+        <h3>Brinco Zircônia 10mm Quadrado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="45.00">10mm - R$ 45,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 45,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Brinco Zircônia 8mm Redondo.webp" alt="Brinco Zircônia 8mm Redondo">
+        <h3>Brinco Zircônia 8mm Redondo</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="40.00">8mm - R$ 40,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 40,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Colar Prata 925 Ponto de Luz coração.webp" alt="Colar Prata 925 Ponto de Luz coração">
+        <h3>Colar Prata 925 Ponto de Luz Coração</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="50cm" data-preco="110.00">50CM - R$ 110,00</option>
+                <option value="60cm" data-preco="130.00">60CM - R$ 130,00</option>
+                <option value="70cm" data-preco="140.00">70CM - R$ 140,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 110,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Redonda.webp" alt="Argola Redonda">
+        <h3>Argola Redonda</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Triângulo Fio Redondo.webp" alt="Argola Triângulo Fio Redondo">
+        <h3>Argola Triângulo Fio Redondo</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Coração Fio Redondo.webp" alt="Argola Coração Fio Redondo">
+        <h3>Argola Coração Fio Redondo</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Losango Fio Redondo.webp" alt="Argola Losango Fio Redondo">
+        <h3>Argola Losango Fio Redondo</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Redonda Torcida.webp" alt="Argola Redonda Torcida">
+        <h3>Argola Redonda Torcida</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Quadrada Fio Quadrado.webp" alt="Argola Quadrada Fio Quadrado">
+        <h3>Argola Quadrada Fio Quadrado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Coração Fio Quadrado.webp" alt="Argola Coração Fio Quadrado">
+        <h3>Argola Coração Fio Quadrado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Coração Torcida.webp" alt="Argola Coração Torcida">
+        <h3>Argola Coração Torcida</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Redonda Detalhada.webp" alt="Argola Redonda Detalhada">
+        <h3>Argola Redonda Detalhada</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Gota Fio.webp" alt="Argola Gota Fio">
+        <h3>Argola Gota Fio</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="P" data-preco="15.00">Tamanho P - R$ 15,00</option>
+                <option value="M" data-preco="15.00">Tamanho M - R$ 15,00</option>
+                <option value="G" data-preco="20.00">Tamanho G - R$ 20,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 15,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="brincos" data-status="sob encomenda">
+        <img src="Argola Lua Fio Quadrado.webp" alt="Argola Lua Fio Quadrado">
+        <h3>Argola Lua Fio Quadrado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Selecione o Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="M" data-preco="20.00">Tamanho M - R$ 20,00</option>
+                <option value="G" data-preco="25.00">Tamanho G - R$ 25,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 20,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Estrela Ponto de Luz Colorido.webp" alt="Choker Pingentes Estrela Ponto de Luz Colorido">
+        <h3>Choker Pingentes Estrela Ponto de Luz Colorido</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Coração Vazado e Fechado Pontos de Luz Coloridos.webp" alt="Choker Coração">
+        <h3>Choker Pingentes Coração Vazado e Fechado Pontos de Luz Coloridos</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Estrela Ponto de Luz Branco.webp" alt="Choker Estrela Branco">
+        <h3>Choker Pingentes Estrela Ponto de Luz Branco</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Estrela e Lua com Pontos de Luz Coloridos.webp" alt="Choker Lua Estrela">
+        <h3>Choker Pingentes Estrela e Lua com Pontos de Luz Coloridos</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Quadrado Ponto de Luz Branco.webp" alt="Choker Quadrado">
+        <h3>Choker Pingentes Quadrado Ponto de Luz Branco</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Ponto de Luz Colorido.webp" alt="Choker Ponto de Luz">
+        <h3>Choker Pingentes Ponto de Luz Colorido</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Luas Fechadas.webp" alt="Choker Luas Fechadas">
+        <h3>Choker Pingentes Luas Fechadas</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Círculo Vazado e Fechado.webp" alt="Choker Círculo">
+        <h3>Choker Pingentes Círculo Vazado e Fechado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Estrelas Ponto de Luz Branco.webp" alt="Choker Estrelas">
+        <h3>Choker Pingentes Estrelas Ponto de Luz Branco</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="colares" data-status="sob encomenda">
+        <img src="Choker Pingentes Estrela Vazada e Fechada.webp" alt="Choker Estrela Vazada">
+        <h3>Choker Pingentes Estrela Vazada e Fechada</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Tamanho:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="40cm" data-preco="70.00">40cm - R$ 70,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 70,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="berloques" data-status="sob encomenda">
+        <img src="Berloque Aparador Fino Cravejado.webp" alt="Berloque Aparador Fino Cravejado">
+        <h3>Berloque Aparador Fino Cravejado</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Disponibilidade:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="40.00">R$ 40,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 40,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="berloques" data-status="sob encomenda">
+        <img src="Berloque Bandeira Brasil Cravejada.webp" alt="Berloque Bandeira Brasil Cravejada">
+        <h3>Berloque Bandeira Brasil Cravejada</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Disponibilidade:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="50.00">R$ 50,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 50,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="berloques" data-status="sob encomenda">
+        <img src="Berloque Bota Country Lisa.webp" alt="Berloque Bota Country Lisa">
+        <h3>Berloque Bota Country Lisa</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Disponibilidade:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="40.00">R$ 40,00</option>
+            </select>
+        </div>
+        <p class="price">R$ 40,00</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="alianças" data-status="sob encomenda">
+        <img src="Par de Alianças de Compromisso em Prata 925 Detalhada 3mm + Caixinha.webp" alt="Par de Alianças">
+        <h3>Par de Alianças de Compromisso em Prata 925 Detalhada 3mm</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos disponíveis:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="279.90">R$ 279,90</option>
+            </select>
+        </div>
+        <p class="price">R$ 279,90</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="alianças" data-status="sob encomenda">
+        <img src="Par De Aliança De Namoro Prata 925 Compromisso.webp" alt="Par De Aliança">
+        <h3>Par De Aliança De Namoro Prata 925 Compromisso</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos disponíveis:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="249.90">R$ 249,90</option>
+            </select>
+        </div>
+        <p class="price">R$ 249,90</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="alianças" data-status="sob encomenda">
+        <img src="Par de Alianças de Namoro em Prata 925 Quadrada 4mm.webp" alt="Par de Alianças">
+        <h3>Par de Alianças de Namoro em Prata 925 Quadrada 4mm</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos disponíveis:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="239.90">R$ 239,90</option>
+            </select>
+        </div>
+        <p class="price">R$ 239,90</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="alianças" data-status="sob encomenda">
+        <img src="Par de Alianças de Namoro em Prata 925 Diamantado no meio 3mm e Zircônia.webp" alt="Par de Alianças">
+        <h3>Par de Alianças de Namoro em Prata 925 Diamantado no meio 3mm e Zircônia</h3>
+        <span class="status encomenda">Sob Encomenda</span>
+        <div class="variacao-tamanho">
+            <label>Consulte os tamanhos disponíveis:</label>
+            <select onchange="atualizarPrecoProduto(this)">
+                <option value="" data-preco="199.90">R$ 199,90</option>
+            </select>
+        </div>
+        <p class="price">R$ 199,90</p>
+        <button class="add-btn" onclick="addCarrinho(this)">Adicionar</button>
+    </div>
+
+</div>
+
+<script>
+let categoriaAtual = 'todos';
+
+function filtrarCategoria(categoria) {
+    categoriaAtual = categoria;
+    
+    // Altera visualmente qual botão do menu está selecionado
+    const botoes = document.querySelectorAll('.navbar button');
+    botoes.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    executarFiltros();
+}
+
+function pesquisarProduto() {
+    executarFiltros();
+}
+
+function executarFiltros() {
+    const textoBusca = document.getElementById('inputBusca').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const nomeProduto = card.querySelector('h3').innerText.toLowerCase();
+        const catProduto = card.getAttribute('data-categoria');
+        const statusProduto = card.getAttribute('data-status');
+
+        let bateCategoria = false;
+        
+        if (categoriaAtual === 'todos') {
+            bateCategoria = true;
+        } else if (categoriaAtual === 'pronto entrega' || categoriaAtual === 'sob encomenda' || categoriaAtual === 'queima de estoque') {
+            if (statusProduto === categoriaAtual) bateCategoria = true;
+        } else {
+            if (catProduto === categoriaAtual) bateCategoria = true;
+        }
+
+        const bateTexto = nomeProduto.includes(textoBusca);
+
+        // Se passar nas duas condições, o produto aparece, senão ele some
+        if (bateCategoria && bateTexto) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function atualizarPrecoProduto(selectElement) {
+    const opcaoSelecionada = selectElement.options[selectElement.selectedIndex];
+    const preco = opcaoSelecionada.getAttribute('data-preco');
+    const card = selectElement.closest('.card');
+    const precoElemento = card.querySelector('.price');
+    
+    if(preco) {
+        precoElemento.innerText = 'R$ ' + parseFloat(preco).toFixed(2).replace('.', ',');
+    }
+}
+
+function ordenarProdutos(criterio) {
+    const container = document.getElementById('listaProdutos');
+    const cards = Array.from(container.querySelectorAll('.card'));
+
+    cards.sort((a, b) => {
+        const nomeA = a.querySelector('h3').innerText.toLowerCase();
+        const nomeB = b.querySelector('h3').innerText.toLowerCase();
+        
+        const selectA = a.querySelector('.variacao-tamanho select');
+        const selectB = b.querySelector('.variacao-tamanho select');
+        const precoA = parseFloat(selectA.options[selectA.selectedIndex]?.getAttribute('data-preco') || 0);
+        const precoB = parseFloat(selectB.options[selectB.selectedIndex]?.getAttribute('data-preco') || 0);
+
+        if (criterio === 'menor') return precoA - precoB;
+        if (criterio === 'maior') return precoB - precoA;
+        if (criterio === 'az') return nomeA.localeCompare(nomeB);
+        if (criterio === 'za') return nomeB.localeCompare(nomeA);
+        return 0;
+    });
+
+    cards.forEach(card => container.appendChild(card));
+}
+
+function addCarrinho(botao) {
+    const card = botao.closest('.card');
+    const nome = card.querySelector('h3').innerText;
+    const preco = card.querySelector('.price').innerText;
+    const select = card.querySelector('.variacao-tamanho select');
+    const variacao = select.options[select.selectedIndex].text;
+    
+    alert(`Produto Adicionado:\n${nome}\nOpção: ${variacao}\nPreço: ${preco}`);
+}
+</script>
+
+</body>
+</html>
